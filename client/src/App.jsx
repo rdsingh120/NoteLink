@@ -1,6 +1,6 @@
 // src\App.jsx
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import useAuthStore from "./store/auth.store";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
@@ -15,14 +15,26 @@ import NewNote from "./features/notes/NewNote";
 import Note from "./features/notes/Note";
 import SharedNote from "./pages/SharedNote";
 import HomePage from "./pages/HomePage";
+import { wakeServer } from "./utils/wakeServer";
 
 const App = () => {
+  const [ready, setReady] = useState(false);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
+
+  
+
+  useEffect(() => {
+    wakeServer(3, 2000).finally(() => setReady(true));
+  }, []);
 
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  if (!ready) {
+    return <div>Loading server...</div>;
+  }
 
   if (isCheckingAuth) return <div>Loading...</div>;
 
