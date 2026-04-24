@@ -28,7 +28,7 @@ app.use("/api/notes", noteRoutes);
 app.use("/api/share", noteShareRoutes);
 
 app.get("/", (req, res) =>
-  res.status(200).json({ success: true, message: "auth service is running" }),
+  res.status(200).json({ success: true, message: "NoteLink service is running" }),
 );
 
 app.listen(port, async () => {
