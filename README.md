@@ -1,9 +1,10 @@
 # NoteLink
 
-A simple note-taking web app with shareable links.
+A simple note-taking web app with shareable links and authentication.
 
 ## Features
 
+* Register & login
 * Create notes
 * View your notes
 * Open a single note
@@ -18,15 +19,16 @@ A simple note-taking web app with shareable links.
 
 ## How it works
 
-1. Create a note
-2. Copy the share link
-3. Open it anywhere (no login required)
+1. Create an account
+2. Create a note
+3. Copy the share link
+4. Open it anywhere (no login required)
 
 ## Run locally
 
 ### Server
 
-```bash
+```bash id="s1"
 cd server
 npm install
 npm run dev
@@ -34,7 +36,7 @@ npm run dev
 
 ### Client
 
-```bash
+```bash id="s2"
 cd client
 npm install
 npm run dev
