@@ -16,13 +16,12 @@ import Note from "./features/notes/Note";
 import SharedNote from "./pages/SharedNote";
 import HomePage from "./pages/HomePage";
 import { wakeServer } from "./utils/wakeServer";
+import LoadingScreen from "./components/LoadingScreen";
 
 const App = () => {
   const [ready, setReady] = useState(false);
   const checkAuth = useAuthStore((state) => state.checkAuth);
   const isCheckingAuth = useAuthStore((state) => state.isCheckingAuth);
-
-  
 
   useEffect(() => {
     wakeServer(3, 2000).finally(() => setReady(true));
@@ -33,10 +32,10 @@ const App = () => {
   }, [checkAuth]);
 
   if (!ready) {
-    return <div>Loading server...</div>;
+    return <LoadingScreen loadingMsg="Starting server" />;
   }
 
-  if (isCheckingAuth) return <div>Loading...</div>;
+  if (isCheckingAuth) return <LoadingScreen />;
 
   return (
     <Routes>
