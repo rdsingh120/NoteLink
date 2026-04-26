@@ -123,7 +123,9 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
         >
           <MdOutlineLogout size={20} />
           {sidebarOpen && (
-            <span className="ml-3 text-sm text-gray-300 truncate max-w-30">Logout</span>
+            <span className="ml-3 text-sm text-gray-300 truncate max-w-30">
+              {isLoading ? "Logging out" : "Logout"}
+            </span>
           )}
         </button>
       </div>

@@ -3,12 +3,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import useNoteStore from "../store/note.store";
+import LoadingScreen from "../components/LoadingScreen";
+
 
 const SharedNote = () => {
   const { noteId } = useParams();
   const [noteData, setNoteData] = useState({ title: "", content: "", isPublic: true });
 
   const getSharedNote = useNoteStore((state) => state.getSharedNote);
+  const isFetchingNote = useNoteStore((state) => state.isFetchingNote);
+
 
   const handleGetNote = async () => {
     try {
@@ -26,6 +30,8 @@ const SharedNote = () => {
   useEffect(() => {
     handleGetNote();
   }, [noteId]);
+
+  if (isFetchingNote) return <LoadingScreen />;
 
   return (
     <form className="space-y-5">

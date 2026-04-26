@@ -9,13 +9,14 @@ const SideBarLink = ({ id, sidebarOpen, title, short }) => {
   const [open, setOpen] = useState(false);
 
   const deleteNoteById = useNoteStore((state) => state.deleteNoteById);
+  const isDeletingNote = useNoteStore((state) => state.isDeletingNote);
 
   const handleDelete = async () => {
     try {
       const { message } = await deleteNoteById(id);
       toast.success(message);
       setOpen(false);
-      navigate("/new")
+      navigate("/new");
     } catch {}
   };
 
@@ -65,6 +66,7 @@ const SideBarLink = ({ id, sidebarOpen, title, short }) => {
             Share
           </button>
           <button
+            disabled={isDeletingNote}
             onClick={handleDelete}
             className="block w-full text-left px-2 py-1 hover:bg-red-400/10 rounded cursor-pointer text-red-500"
           >

@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 const NewNote = () => {
   //AuthStore
   const createNote = useNoteStore((state) => state.createNote);
-  const isLoading = useNoteStore((state) => state.isLoading);
+  const isCreatingNote = useNoteStore((state) => state.isCreatingNote);
   const clearError = useNoteStore((state) => state.clearError);
 
   //Form state
@@ -51,8 +51,8 @@ const NewNote = () => {
         placeholder="Enter your notes..."
       ></textarea>
       <Button
-        text={isLoading ? "Saving..." : "Save"}
-        disabled={isLoading || !(noteData.title && noteData.content)}
+        text={isCreatingNote ? "Saving..." : "Save"}
+        disabled={isCreatingNote || !(noteData.title && noteData.content)}
       />
     </form>
   );

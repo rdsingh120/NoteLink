@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
+import LoadingScreen from "../../components/LoadingScreen";
 import useNoteStore from "../../store/note.store";
 import { toast } from "react-toastify";
 
@@ -14,7 +15,8 @@ const Note = () => {
 
   const getNoteById = useNoteStore((state) => state.getNoteById);
   const updateNoteById = useNoteStore((state) => state.updateNoteById);
-  const isLoading = useNoteStore((state) => state.isLoading);
+  const isUpdatingNote = useNoteStore((state) => state.isUpdatingNote);
+  const isFetchingNote = useNoteStore((state) => state.isFetchingNote);
   const clearError = useNoteStore((state) => state.clearError);
 
   const handleChange = (e) => {
@@ -79,6 +81,8 @@ const Note = () => {
   useEffect(() => {
     handleGetNote();
   }, [noteId]);
+
+  if (isFetchingNote) return <LoadingScreen />;
   return (
     <form className="space-y-5">
       <input
@@ -101,9 +105,9 @@ const Note = () => {
       {/* Place holder */}
       <div className="flex items-center justify-between">
         <Button
-          text={isLoading ? "Updating..." : "Update"}
+          text={isUpdatingNote ? "Updating..." : "Update"}
           onClick={handleUpdateNote}
-          disabled={isLoading}
+          disabled={isUpdatingNote}
         />
         <p className="text-gray-500 text-xs">Last updated: {getLastUpdatedText()}</p>
       </div>
