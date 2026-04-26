@@ -1,4 +1,4 @@
-# NoteLink
+# NoteLink – Shareable Notes App
 
 A simple note-taking web app with shareable links and authentication.
 
@@ -9,6 +9,12 @@ A simple note-taking web app with shareable links and authentication.
 * View your notes
 * Open a single note
 * Share notes via public link
+* Update notes
+* Delete notes
+* Share notes via public link
+* Relative "last updated" timestamps
+* Sidebar dropdown actions (share/delete)
+* Loading screen & overlay loader
 
 ## Tech Stack
 
@@ -16,6 +22,16 @@ A simple note-taking web app with shareable links and authentication.
 * Express
 * React
 * Node.js
+
+## Recent Improvements
+
+* Full note update flow (backend → API → store → UI)
+* Improved note ordering logic
+* Centralized error handling in Dashboard
+* Server wake/retry logic on app init
+* Cross-site auth fix (SameSite cookies)
+* Netlify routing fix for SPA
+* Relative time display for notes (min/hr/day/month/year)
 
 ## How it works
 
@@ -41,9 +57,5 @@ cd client
 npm install
 npm run dev
 ```
-
-## Goal
-
-Built to practice shipping a complete full-stack app with minimal features.
 
 ---
