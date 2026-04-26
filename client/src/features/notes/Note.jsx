@@ -9,6 +9,8 @@ import { toast } from "react-toastify";
 const Note = () => {
   const { noteId } = useParams();
   const [noteData, setNoteData] = useState({ title: "", content: "", isPublic: true });
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [tick, setTick] = useState(0);
 
   const getNoteById = useNoteStore((state) => state.getNoteById);
   const updateNoteById = useNoteStore((state) => state.updateNoteById);
@@ -28,9 +30,31 @@ const Note = () => {
         content: note.content || "",
         isPublic: note.isPublic ?? true,
       });
+      setLastUpdated(new Date(note.updatedAt));
     } catch {
       // do nothing → store already handled error
     }
+  };
+
+  const getLastUpdatedText = () => {
+    if (!lastUpdated) return "";
+
+    const diffMin = Math.floor((new Date() - lastUpdated) / 60000);
+
+    if (diffMin < 1) return "just now";
+    if (diffMin < 60) return `${diffMin} min ago`;
+
+    const diffHr = Math.floor(diffMin / 60);
+    if (diffHr < 24) return `${diffHr} hr ago`;
+
+    const diffDay = Math.floor(diffHr / 24);
+    if (diffDay < 30) return `${diffDay} day(s) ago`;
+
+    const diffMonth = Math.floor(diffDay / 30);
+    if (diffMonth < 12) return `${diffMonth} month(s) ago`;
+
+    const diffYear = Math.floor(diffMonth / 12);
+    return `${diffYear} year(s) ago`;
   };
 
   const handleUpdateNote = async (e) => {
@@ -39,11 +63,18 @@ const Note = () => {
     try {
       const { message } = await updateNoteById(noteId, noteData);
       toast.success(message || "Note updated successfully.");
-      
     } catch {
       // do nothing → store already handled error
     }
   };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setTick((t) => t + 1);
+    }, 60000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   useEffect(() => {
     handleGetNote();
@@ -68,11 +99,14 @@ const Note = () => {
       ></textarea>
 
       {/* Place holder */}
-      <Button
-        text={isLoading ? "Updating..." : "Update"}
-        onClick={handleUpdateNote}
-        disabled={isLoading}
-      />
+      <div className="flex items-center justify-between">
+        <Button
+          text={isLoading ? "Updating..." : "Update"}
+          onClick={handleUpdateNote}
+          disabled={isLoading}
+        />
+        <p className="text-gray-500 text-xs">Last updated: {getLastUpdatedText()}</p>
+      </div>
     </form>
   );
 };
