@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Button from "../../components/Button";
-import LoadingScreen from "../../components/LoadingScreen";
+import Loader from "../../components/Loader";
 import useNoteStore from "../../store/note.store";
 import { toast } from "react-toastify";
 
@@ -82,7 +82,7 @@ const Note = () => {
     handleGetNote();
   }, [noteId]);
 
-  if (isFetchingNote) return <LoadingScreen />;
+  if (isFetchingNote) return <Loader />;
   return (
     <form className="space-y-5">
       <input
