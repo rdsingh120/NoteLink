@@ -3,6 +3,7 @@
 import { create } from "zustand";
 import {
   createNewNote,
+  deleteUserNoteById,
   getPublicNoteById,
   getUserNoteById,
   getUserNotes,
@@ -80,6 +81,22 @@ const useNoteStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({ isLoading: false, error: getErrorMessage(error, "Failed to update the note") });
+      throw error;
+    }
+  },
+
+  deleteNoteById: async (noteId) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await deleteUserNoteById(noteId);
+      set((state) => ({
+        isLoading: false,
+        error: null,
+        notes: state.notes.filter((note) => note._id !== noteId),
+      }));
+      return data;
+    } catch (error) {
+      set({ isLoading: false, error: getErrorMessage(error, "Failed to delete the note") });
       throw error;
     }
   },

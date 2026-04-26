@@ -26,3 +26,8 @@ export const updateUserNoteById = async (noteId, updatedNoteData) => {
   const { data } = await api.put(`/notes/${noteId}`, updatedNoteData);
   return data;
 };
+
+export const deleteUserNoteById = async (noteId) => {
+  const { data } = await api.delete(`/notes/${noteId}`);
+  return data;
+};

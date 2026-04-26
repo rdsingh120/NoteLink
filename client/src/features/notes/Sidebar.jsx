@@ -87,11 +87,11 @@ const Sidebar = ({ sidebarOpen, setSidebarOpen }) => {
           </NavLink>
 
           {/* Notes list */}
-          <div className="flex flex-col gap-1 max-h-125 overflow-y-auto overflow-x-hidden pr-2">
+          <div className="flex flex-col gap-1 max-h-125 overflow-y-auto overflow-x-hidden pr-2 relative">
             {notes.map((note) => (
               <SideBarLink
                 key={note.id || note._id}
-                to={`/n/${note.id || note._id}`}
+                id={note.id || note._id}
                 sidebarOpen={sidebarOpen}
                 title={note.title.length > 20 ? `${note.title.substring(0, 20)}...` : note.title}
               />

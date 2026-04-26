@@ -99,8 +99,6 @@ export const updateUserNoteById = async (req, res) => {
       },
     );
 
-    
-
     if (!updatedNote) {
       return res.status(404).json({
         success: false,
@@ -111,5 +109,29 @@ export const updateUserNoteById = async (req, res) => {
     res.status(200).json({ success: true, message: "Updated note successful", note: updatedNote });
   } catch (error) {
     serverErrorResponse("updateUserNoteById", error, res);
+  }
+};
+
+export const deleteUserNoteById = async (req, res) => {
+  const noteId = req.params.id;
+
+  const user = req.user;
+  if (!user)
+    return res
+      .status(401)
+      .json({ success: false, message: "Not Authenticated, please login to delete your notes" });
+
+  try {
+    const deletedNote = await Note.findOneAndDelete({ _id: noteId, userId: user._id });
+
+    if (!deletedNote) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or not authorized to delete",
+      });
+    }
+    res.status(200).json({ success: true, message: "Note deleted successfully" });
+  } catch (error) {
+    serverErrorResponse("deleteUserNoteById", error, res);
   }
 };

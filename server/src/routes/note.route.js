@@ -3,6 +3,7 @@
 import { Router } from "express";
 import {
   createNewNote,
+  deleteUserNoteById,
   getUserNoteById,
   getUserNotes,
   updateUserNoteById,
@@ -15,5 +16,6 @@ router.post("/", protect, createNewNote);
 router.get("/", protect, getUserNotes);
 router.get("/:id", protect, getUserNoteById);
 router.put("/:id", protect, updateUserNoteById);
+router.delete("/:id", protect, deleteUserNoteById);
 
 export default router;
