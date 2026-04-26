@@ -75,3 +75,41 @@ export const getPublicNoteById = async (req, res) => {
     serverErrorResponse("getPublicNoteById", error, res);
   }
 };
+
+export const updateUserNoteById = async (req, res) => {
+  const noteId = req.params.id;
+
+  const user = req.user;
+  if (!user)
+    return res
+      .status(401)
+      .json({ success: false, message: "Not Authenticated, please login to edit your notes" });
+
+  const { title, content, isPublic } = req.body;
+
+  if (!title) return res.status(400).json({ success: false, message: "Note title is required." });
+  if (!content) return res.status(400).json({ success: false, message: "Note cannot be empty." });
+
+  try {
+    const updatedNote = await Note.findOneAndUpdate(
+      { _id: noteId, userId: user._id },
+      { title, content, isPublic },
+      {
+        returnDocument: "after",
+      },
+    );
+
+    
+
+    if (!updatedNote) {
+      return res.status(404).json({
+        success: false,
+        message: "Note not found or you are not authorized to edit it",
+      });
+    }
+
+    res.status(200).json({ success: true, message: "Updated note successful", note: updatedNote });
+  } catch (error) {
+    serverErrorResponse("updateUserNoteById", error, res);
+  }
+};

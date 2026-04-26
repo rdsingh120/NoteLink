@@ -1,7 +1,13 @@
 // src\store\note.store.js
 
 import { create } from "zustand";
-import { createNewNote, getPublicNoteById, getUserNoteById, getUserNotes } from "../api/note.api";
+import {
+  createNewNote,
+  getPublicNoteById,
+  getUserNoteById,
+  getUserNotes,
+  updateUserNoteById,
+} from "../api/note.api";
 
 const getErrorMessage = (error, fallback) => error?.response?.data?.message || fallback;
 
@@ -14,7 +20,7 @@ const useNoteStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await createNewNote(noteData);
-      set({ isLoading: false, error: null, notes: [...get().notes, data.note] });
+      set((state) => ({ isLoading: false, error: null, notes: [data.note, ...state.notes] }));
       return data;
     } catch (error) {
       set({ isLoading: false, error: getErrorMessage(error, "Note creation failed") });
@@ -54,6 +60,22 @@ const useNoteStore = create((set, get) => ({
       return data;
     } catch (error) {
       set({ isLoading: false, error: getErrorMessage(error, "Failed to fetch shared note") });
+      throw error;
+    }
+  },
+
+  updateNoteById: async (noteId, updatedNoteData) => {
+    set({ isLoading: true, error: null });
+    try {
+      const data = await updateUserNoteById(noteId, updatedNoteData);
+      set((state) => ({
+        isLoading: false,
+        error: null,
+        notes: state.notes.map((note) => (note._id === noteId ? data.note : note)),
+      }));
+      return data;
+    } catch (error) {
+      set({ isLoading: false, error: getErrorMessage(error, "Failed to update the note") });
       throw error;
     }
   },

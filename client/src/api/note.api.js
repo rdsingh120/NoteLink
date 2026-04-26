@@ -21,3 +21,8 @@ export const getPublicNoteById = async (noteId) => {
   const { data } = await api.get(`/share/${noteId}`);
   return data;
 };
+
+export const updateUserNoteById = async (noteId, updatedNoteData) => {
+  const { data } = await api.put(`/notes/${noteId}`, updatedNoteData);
+  return data;
+};
