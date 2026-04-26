@@ -20,7 +20,11 @@ const useNoteStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await createNewNote(noteData);
-      set((state) => ({ isLoading: false, error: null, notes: [data.note, ...state.notes] }));
+      set((state) => ({
+        isLoading: false,
+        error: null,
+        notes: [data.note, ...state.notes],
+      }));
       return data;
     } catch (error) {
       set({ isLoading: false, error: getErrorMessage(error, "Note creation failed") });
@@ -32,7 +36,7 @@ const useNoteStore = create((set, get) => ({
     set({ isLoading: true, error: null });
     try {
       const data = await getUserNotes();
-      set({ notes: data.notes, isLoading: false, error: null });
+      set({ notes: data.notes.toReversed(), isLoading: false, error: null });
       return data;
     } catch (error) {
       set({ isLoading: false, error: getErrorMessage(error, "Failed to fetch notes") });
