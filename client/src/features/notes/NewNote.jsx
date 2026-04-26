@@ -9,7 +9,6 @@ const NewNote = () => {
   //AuthStore
   const createNote = useNoteStore((state) => state.createNote);
   const isLoading = useNoteStore((state) => state.isLoading);
-  const error = useNoteStore((state) => state.error);
   const clearError = useNoteStore((state) => state.clearError);
 
   //Form state
@@ -32,13 +31,6 @@ const NewNote = () => {
       // do nothing → store already handled error
     }
   };
-
-  useEffect(() => {
-    if (error) {
-      toast.error(error);
-      clearError();
-    }
-  }, [error, clearError]);
 
   return (
     <form className="space-y-5" onSubmit={handleSubmit}>

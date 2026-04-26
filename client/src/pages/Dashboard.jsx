@@ -2,10 +2,22 @@
 
 import { Outlet } from "react-router-dom";
 import SideBar from "../features/notes/Sidebar";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import useNoteStore from "../store/note.store";
+import { toast } from "react-toastify";
 
 const Dashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  const error = useNoteStore((state) => state.error);
+  const clearError = useNoteStore((state) => state.clearError);
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      clearError();
+    }
+  }, [error, clearError]);
 
   return (
     <div className="h-screen flex overflow-hidden">
