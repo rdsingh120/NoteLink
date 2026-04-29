@@ -11,7 +11,7 @@ const Note = () => {
   const { noteId } = useParams();
   const [noteData, setNoteData] = useState({ title: "", content: "", isPublic: true });
   const [lastUpdated, setLastUpdated] = useState(null);
-  const [tick, setTick] = useState(0);
+  const [now, setNow] = useState(Date.now());
 
   const getNoteById = useNoteStore((state) => state.getNoteById);
   const updateNoteById = useNoteStore((state) => state.updateNoteById);
@@ -41,7 +41,7 @@ const Note = () => {
   const getLastUpdatedText = () => {
     if (!lastUpdated) return "";
 
-    const diffMin = Math.floor((new Date() - lastUpdated) / 60000);
+    const diffMin = Math.floor((now - lastUpdated.getTime()) / 60000);
 
     if (diffMin < 1) return "just now";
     if (diffMin < 60) return `${diffMin} min ago`;
@@ -63,7 +63,14 @@ const Note = () => {
     e.preventDefault();
     clearError();
     try {
-      const { message } = await updateNoteById(noteId, noteData);
+      const { message, note } = await updateNoteById(noteId, noteData);
+
+      if (note?.updatedAt) {
+        setLastUpdated(new Date(note.updatedAt));
+      } else {
+        setLastUpdated(new Date());
+      }
+
       toast.success(message || "Note updated successfully.");
     } catch {
       // do nothing → store already handled error
@@ -72,7 +79,7 @@ const Note = () => {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setTick((t) => t + 1);
+      setTick(Date.now());
     }, 60000);
 
     return () => clearInterval(interval);
@@ -84,7 +91,7 @@ const Note = () => {
 
   if (isFetchingNote) return <Loader />;
   return (
-    <form className="space-y-5">
+    <form className="space-y-5" onSubmit={handleUpdateNote}>
       <input
         name="title"
         type="text"
@@ -104,11 +111,7 @@ const Note = () => {
 
       {/* Place holder */}
       <div className="flex items-center justify-between">
-        <Button
-          text={isUpdatingNote ? "Updating..." : "Update"}
-          onClick={handleUpdateNote}
-          disabled={isUpdatingNote}
-        />
+        <Button text={isUpdatingNote ? "Updating..." : "Update"} disabled={isUpdatingNote} />
         <p className="text-gray-500 text-xs">Last updated: {getLastUpdatedText()}</p>
       </div>
     </form>
