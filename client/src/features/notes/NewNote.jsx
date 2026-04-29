@@ -4,8 +4,11 @@ import { useEffect, useState } from "react";
 import Button from "../../components/Button";
 import useNoteStore from "../../store/note.store";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const NewNote = () => {
+  const navigate = useNavigate()
+
   //AuthStore
   const createNote = useNoteStore((state) => state.createNote);
   const isCreatingNote = useNoteStore((state) => state.isCreatingNote);
@@ -27,6 +30,8 @@ const NewNote = () => {
       const data = await createNote(noteData);
       toast.success(data?.message || "Note created successfully.");
       setNoteData({ title: "", content: "", isPublic: true });
+      
+      navigate(`/n/${data?.note?._id}`)
     } catch (error) {
       // do nothing → store already handled error
     }
