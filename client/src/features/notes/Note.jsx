@@ -86,7 +86,7 @@ const Note = () => {
   }, []);
 
   useEffect(() => {
-    handleGetNote();
+    if (noteId) handleGetNote();
   }, [noteId]);
 
   if (isFetchingNote) return <Loader />;
